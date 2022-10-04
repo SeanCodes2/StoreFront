@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 
-StoreFront.UI.MVC/appsettings.json
+/StoreFront.UI.MVC/appsettings.json

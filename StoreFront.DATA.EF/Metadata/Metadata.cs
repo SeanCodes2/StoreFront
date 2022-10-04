@@ -43,7 +43,12 @@ namespace StoreFront.DATA.EF.Models//Metadata
         */
     #endregion
 
-    
+    #region nothing
+    //sdfg
+
+    #endregion
+
+
     public class CategoryMetadata
     {
         public int CategoryId { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,14 +11,19 @@ namespace StoreFront.DATA.EF.Models//Metadata
     //{
     //}
 
+    [ModelMetadataType(typeof(CategoryMetadata))]
     public partial class Category { }
 
+    [ModelMetadataType(typeof(CustomerMetadata))]
     public partial class Customer { }
 
+    [ModelMetadataType(typeof(ManufacturerMetadata))]
     public partial class Manufacturer { }
 
+    [ModelMetadataType(typeof(OrderMetadata))]
     public partial class Order { }
 
+    [ModelMetadataType(typeof(ProductMetadata))]
     public partial class Product { }
 
 

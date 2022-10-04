@@ -43,7 +43,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         */
     #endregion
 
-    [ModelMetadataType(typeof(CategoryMetadata))]
+    
     public class CategoryMetadata
     {
         public int CategoryId { get; set; }
@@ -59,7 +59,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public string? CategoryDescription { get; set; }
     }
 
-    [ModelMetadataType(typeof(CustomerMetadata))]
+    
     public class CustomerMetadata
     {
         public int CustomerId { get; set; }
@@ -85,7 +85,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public string? UserId { get; set; }
     }
 
-    [ModelMetadataType(typeof(ManufacturerMetadata))]
+   
     public class ManufacturerMetadata
     {
         public int ManufacturerId { get; set; }
@@ -96,7 +96,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public string ManufacturerName { get; set; } = null!;
     }
 
-    [ModelMetadataType(typeof(OrderMetadata))]
+    
     public class OrderMetadata
     {
         public int OrderId { get; set; }
@@ -123,7 +123,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public decimal OrderAmoutTotal { get; set; }
     }
 
-    [ModelMetadataType(typeof(ProductMetadata))]
+    
     public class ProductMetadata
     {
         public int ProductId { get; set; }

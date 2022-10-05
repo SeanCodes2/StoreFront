@@ -148,7 +148,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
         [Display(Name = "Price")]
         [DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false)]
         [Required(ErrorMessage = "*Price is Required")]
-        [Range(0, double.MaxValue)]
+        [Range(0, double.MaxValue)]        
         public decimal ProductPrice { get; set; }
 
         [Display(Name = "In Stock")]

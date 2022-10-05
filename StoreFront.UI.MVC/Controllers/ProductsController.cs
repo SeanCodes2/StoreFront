@@ -21,8 +21,13 @@ namespace StoreFront.UI.MVC.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
-            return View(await storeFrontContext.ToListAsync());
+            //var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
+            var products = _context.Products.Where(p => !p.Discontinued)
+               .Include(p => p.Category)
+               .Include(p => p.Manufacturer)
+               .Include(p => p.ProductOrders);
+
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5

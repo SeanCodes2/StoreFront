@@ -29,7 +29,7 @@
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-2 px-xl-5">
-            <div class="col-lg-6 d-none d-lg-block">
+            @*<div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center">
                     <a class="text-dark" href="">FAQs</a>
                     <span class="text-muted px-2">|</span>
@@ -56,7 +56,7 @@
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
-            </div>
+            </div>*@
         </div>
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
@@ -99,23 +99,25 @@
                 </a>
                @RenderSection("NavBarClass", false) 
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Dresses <i class="fa fa-angle-down float-right mt-1"></i></a>
+                        @*<div class="nav-item dropdown">
+                            <a href="#" class="nav-link" data-toggle="dropdown">Admin<i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                <a href="" class="dropdown-item">Men's Dresses</a>
-                                <a href="" class="dropdown-item">Women's Dresses</a>
-                                <a href="" class="dropdown-item">Baby's Dresses</a>
+                                <a href="" class="dropdown-item">Users</a>
+                                <a href="" class="dropdown-item">Roles</a>
+                                <a href="" class="dropdown-item">Suppliers</a>
+                                <a href="" class="dropdown-item">Categories</a>
                             </div>
-                        </div>
-                        <a href="" class="nav-item nav-link">Shirts</a>
-                        <a href="" class="nav-item nav-link">Jeans</a>
-                        <a href="" class="nav-item nav-link">Swimwear</a>
-                        <a href="" class="nav-item nav-link">Sleepwear</a>
-                        <a href="" class="nav-item nav-link">Sportswear</a>
-                        <a href="" class="nav-item nav-link">Jumpsuits</a>
-                        <a href="" class="nav-item nav-link">Blazers</a>
-                        <a href="" class="nav-item nav-link">Jackets</a>
-                        <a href="" class="nav-item nav-link">Shoes</a>
+                        </div>*@
+                        <a href="" class="nav-item nav-link">Handlebars</a>
+                        <a href="" class="nav-item nav-link">Wheels</a>
+                        <a href="" class="nav-item nav-link">Tires</a>
+                        <a href="" class="nav-item nav-link">Brakes</a>
+                        <a href="" class="nav-item nav-link">Suspension</a>
+                        <a href="" class="nav-item nav-link">Pedals</a>
+                        <a href="" class="nav-item nav-link">Saddles</a>
+                        <a href="" class="nav-item nav-link">Drivetrain</a>
+                        <a href="" class="nav-item nav-link">Seatpost</a>
+                        <a href="" class="nav-item nav-link">Maintenance</a>
                     </div>
                 </nav>
             </div>
@@ -129,21 +131,28 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <a href="@Url.Action("Index", "Home")" class="nav-item nav-link active">Home</a>
+                            <a href="@Url.Action("Shop", "Home")" class="nav-item nav-link">Shop</a>
+                            <a href="@Url.Action("Detail", "Home")" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                    <a href="@Url.Action("Cart", "Home")" class="dropdown-item">Shopping Cart</a>
+                                    <a href="@Url.Action("CheckOut", "Home")" class="dropdown-item">Checkout</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             <a href="" class="nav-item nav-link">Login</a>
                             <a href="" class="nav-item nav-link">Register</a>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Admin</a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="@Url.Action("ListUsers", "Administration")" class="dropdown-item">Users</a>
+                                    <a href="@Url.Action("ListRoles", "Administration")" class="dropdown-item">Roles</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </nav>
@@ -154,8 +163,8 @@
     <!-- Navbar End -->
     <!-- Page Header Start -->
     <div class="container-fluid bg-secondary mb-5">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">@ViewData["Title"]</h1>
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 160px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">@ViewData["Title2"]</h1>
             <div class="d-inline-flex">
                 <p class="m-0"><a href="">Home</a></p>
                 <p class="m-0 px-2">-</p>

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,7 +19,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/62ecb385d9.js" crossorigin="anonymous"></script>
+    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">*@
 
     <!-- Libraries Stylesheet -->
     <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -30,38 +34,38 @@
     <div class="container-fluid">
         <div class="row bg-secondary py-2 px-xl-5">
             @*<div class="col-lg-6 d-none d-lg-block">
-                <div class="d-inline-flex align-items-center">
-                    <a class="text-dark" href="">FAQs</a>
-                    <span class="text-muted px-2">|</span>
-                    <a class="text-dark" href="">Help</a>
-                    <span class="text-muted px-2">|</span>
-                    <a class="text-dark" href="">Support</a>
-                </div>
+            <div class="d-inline-flex align-items-center">
+            <a class="text-dark" href="">FAQs</a>
+            <span class="text-muted px-2">|</span>
+            <a class="text-dark" href="">Help</a>
+            <span class="text-muted px-2">|</span>
+            <a class="text-dark" href="">Support</a>
+            </div>
             </div>
             <div class="col-lg-6 text-center text-lg-right">
-                <div class="d-inline-flex align-items-center">
-                    <a class="text-dark px-2" href="">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a class="text-dark px-2" href="">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a class="text-dark px-2" href="">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a class="text-dark px-2" href="">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a class="text-dark pl-2" href="">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
+            <div class="d-inline-flex align-items-center">
+            <a class="text-dark px-2" href="">
+            <i class="fab fa-facebook-f"></i>
+            </a>
+            <a class="text-dark px-2" href="">
+            <i class="fab fa-twitter"></i>
+            </a>
+            <a class="text-dark px-2" href="">
+            <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a class="text-dark px-2" href="">
+            <i class="fab fa-instagram"></i>
+            </a>
+            <a class="text-dark pl-2" href="">
+            <i class="fab fa-youtube"></i>
+            </a>
+            </div>
             </div>*@
         </div>
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a href="" class="text-decoration-none">
-                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">MTB</span>Parts</h1>
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
@@ -97,34 +101,35 @@
                     <h6 class="m-0">Categories</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
-               @RenderSection("NavBarClass", false) 
-                    <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                        @*<div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Admin<i class="fa fa-angle-down float-right mt-1"></i></a>
-                            <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                <a href="" class="dropdown-item">Users</a>
-                                <a href="" class="dropdown-item">Roles</a>
-                                <a href="" class="dropdown-item">Suppliers</a>
-                                <a href="" class="dropdown-item">Categories</a>
-                            </div>
-                        </div>*@
-                        <a href="" class="nav-item nav-link">Handlebars</a>
-                        <a href="" class="nav-item nav-link">Wheels</a>
-                        <a href="" class="nav-item nav-link">Tires</a>
-                        <a href="" class="nav-item nav-link">Brakes</a>
-                        <a href="" class="nav-item nav-link">Suspension</a>
-                        <a href="" class="nav-item nav-link">Pedals</a>
-                        <a href="" class="nav-item nav-link">Saddles</a>
-                        <a href="" class="nav-item nav-link">Drivetrain</a>
-                        <a href="" class="nav-item nav-link">Seatpost</a>
-                        <a href="" class="nav-item nav-link">Maintenance</a>
+              @RenderSection("NavBarClass", false)                
+
+                <div class="navbar-nav w-100 overflow-hidden " style="height: 410px">
+                    @*<div class="nav-item dropdown">
+                    <a href="#" class="nav-link" data-toggle="dropdown">Admin<i class="fa fa-angle-down float-right mt-1"></i></a>
+                    <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+                    <a href="" class="dropdown-item">Users</a>
+                    <a href="" class="dropdown-item">Roles</a>
+                    <a href="" class="dropdown-item">Suppliers</a>
+                    <a href="" class="dropdown-item">Categories</a>
                     </div>
+                    </div>*@
+                    <a href="" class="nav-item nav-link">Handlebars</a>
+                    <a href="" class="nav-item nav-link">Wheels</a>
+                    <a href="" class="nav-item nav-link">Tires</a>
+                    <a href="" class="nav-item nav-link">Brakes</a>
+                    <a href="" class="nav-item nav-link">Suspension</a>
+                    <a href="" class="nav-item nav-link">Pedals</a>
+                    <a href="" class="nav-item nav-link">Saddles</a>
+                    <a href="" class="nav-item nav-link">Drivetrain</a>
+                    <a href="" class="nav-item nav-link">Seatpost</a>
+                    <a href="" class="nav-item nav-link">Maintenance</a>
+                </div>
                 </nav>
             </div>
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                        <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">MTB</span>Parts</h1>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -132,27 +137,36 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="@Url.Action("Index", "Home")" class="nav-item nav-link active">Home</a>
-                            <a href="@Url.Action("Shop", "Home")" class="nav-item nav-link">Shop</a>
-                            <a href="@Url.Action("Detail", "Home")" class="nav-item nav-link">Shop Detail</a>
+                            <a href="@Url.Action("Index", "Products")" class="nav-item nav-link">Shop</a>
+                            @if (User.IsInRole("Admin"))
+                            {                                
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Admin</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        <a href="@Url.Action("ListUsers", "Administration")" class="dropdown-item">Users</a>
+                                        <a href="@Url.Action("ListRoles", "Administration")" class="dropdown-item">Roles</a>
+                                        <a href="@Url.Action("Index", "Manufacturers")" class="dropdown-item">Manufacturers</a>
+                                        <a href="@Url.Action("Index", "Categories")" class="dropdown-item">Categories</a>
+                                        <a href="@Url.Action("Index", "Customers")" class="dropdown-item">Customers</a>
+                                    </div>
+                                </div>
+                            }
+
+                            @*<a asp-action="Details" asp-controller="Products" asp-route-id="2"  class="nav-item nav-link">Shop Detail</a>*@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                                @if (signInManager.IsSignedIn(User)){
                                 <div class="dropdown-menu rounded-0 m-0">
                                     <a href="@Url.Action("Cart", "Home")" class="dropdown-item">Shopping Cart</a>
                                     <a href="@Url.Action("CheckOut", "Home")" class="dropdown-item">Checkout</a>
                                 </div>
+                                }
                             </div>
                             <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
-                            <a href="" class="nav-item nav-link">Login</a>
-                            <a href="" class="nav-item nav-link">Register</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Admin</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="@Url.Action("ListUsers", "Administration")" class="dropdown-item">Users</a>
-                                    <a href="@Url.Action("ListRoles", "Administration")" class="dropdown-item">Roles</a>
-                                </div>
-                            </div>
+                            <partial name="_LoginPartial" />
+
                         </div>
                     </div>
                 </nav>
@@ -166,9 +180,9 @@
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 160px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">@ViewData["Title2"]</h1>
             <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
-                <p class="m-0 px-2">-</p>
-                <p class="m-0">@ViewData["Title"]</p>
+                <h4 class="m-0 "><a href="@Url.Action("Index", "Home")">Home</a></h4>
+                <h4 class="m-0 px-2">-</h4>
+                <h4 class="m-0">@ViewData["Title"]</h4>
             </div>
         </div>
     </div>
@@ -180,7 +194,7 @@
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <a href="" class="text-decoration-none">
-                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Shopper</h1>
+                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">MTB</span>Parts</h1>
                 </a>
                 <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>

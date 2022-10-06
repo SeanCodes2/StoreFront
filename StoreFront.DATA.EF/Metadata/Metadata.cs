@@ -51,6 +51,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
 
     public class CategoryMetadata
     {
+        
         public int CategoryId { get; set; }
 
         [StringLength(100, ErrorMessage ="*Cannot Exceed 100 Characters")]
@@ -131,8 +132,11 @@ namespace StoreFront.DATA.EF.Models//Metadata
     
     public class ProductMetadata
     {
+        
         public int ProductId { get; set; }
+        [Display(Name="Category Name")]
         public int CategoryId { get; set; }
+        [Display(Name ="Manufacturer Name")]
         public int ManufacturerId { get; set; }
 
         [StringLength(100, ErrorMessage ="*Cannot Exceed 100 Characters")]

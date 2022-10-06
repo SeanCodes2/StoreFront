@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly StoreFrontContext _context;
@@ -19,6 +22,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Orders
+        
         public async Task<IActionResult> Index()
         {
             var storeFrontContext = _context.Orders.Include(o => o.Customer);

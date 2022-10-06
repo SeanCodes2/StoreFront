@@ -3,33 +3,40 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section NavBarClass {
+    <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
+    }
+        <div class="row">
+            <div class="col-8 offset-2">
 
-<h1>Index</h1>
+                <h1>Manufacturers</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ManufacturerName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManufacturerName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ManufacturerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ManufacturerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ManufacturerId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <p>
+                    <a asp-action="Create" class="btn btn-warning">Add Manufacturer</a>
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                            @Html.DisplayNameFor(model => model.ManufacturerName)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach (var item in Model)
+                {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.ManufacturerId">@Html.DisplayFor(modelItem => item.ManufacturerName)</a>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ManufacturerId">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ManufacturerId">Delete</a>
+                            </td>
+                        </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>

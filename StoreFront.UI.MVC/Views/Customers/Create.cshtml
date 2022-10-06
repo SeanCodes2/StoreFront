@@ -3,56 +3,60 @@
 @{
     ViewData["Title"] = "Create";
 }
+@section NavBarClass {
+    <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
+    }
+        <div class="row">
+            <div class="col-8 offset-2">
+                <h1>Add New Customer</h1>
 
-<h1>Create</h1>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="CustomerId" />
+                           @* <div class="form-group">
+                                <label asp-for="CustomerId" class="control-label"></label>
+                                <input asp-for="CustomerId" class="form-control" />
+                                <span asp-validation-for="CustomerId" class="text-danger"></span>
+                            </div>*@
+                            <div class="form-group">
+                                <label asp-for="ShipToName" class="control-label"></label>
+                                <input asp-for="ShipToName" class="form-control" />
+                                <span asp-validation-for="ShipToName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ShipToCity" class="control-label"></label>
+                                <input asp-for="ShipToCity" class="form-control" />
+                                <span asp-validation-for="ShipToCity" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ShipToState" class="control-label"></label>
+                                <input asp-for="ShipToState" class="form-control" />
+                                <span asp-validation-for="ShipToState" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ShipToZip" class="control-label"></label>
+                                <input asp-for="ShipToZip" class="form-control" />
+                                <span asp-validation-for="ShipToZip" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserId" class="control-label"></label>
+                                <input asp-for="UserId" class="form-control" />
+                                <span asp-validation-for="UserId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-warning" />
+                                <a asp-action="Index" class="btn btn-info ml-3">Back to List</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<h4>Customer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <input asp-for="CustomerId" class="form-control" />
-                <span asp-validation-for="CustomerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShipToName" class="control-label"></label>
-                <input asp-for="ShipToName" class="form-control" />
-                <span asp-validation-for="ShipToName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShipToCity" class="control-label"></label>
-                <input asp-for="ShipToCity" class="form-control" />
-                <span asp-validation-for="ShipToCity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShipToState" class="control-label"></label>
-                <input asp-for="ShipToState" class="form-control" />
-                <span asp-validation-for="ShipToState" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShipToZip" class="control-label"></label>
-                <input asp-for="ShipToZip" class="form-control" />
-                <span asp-validation-for="ShipToZip" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

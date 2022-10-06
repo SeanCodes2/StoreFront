@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class ProductsController : Controller
     {
         private readonly StoreFrontContext _context;
@@ -19,6 +21,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Products
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             //var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
@@ -30,7 +33,21 @@ namespace StoreFront.UI.MVC.Controllers
             return View(await products.ToListAsync());
         }
 
+        // GET: TableView
+        [AllowAnonymous]
+        public async Task<IActionResult> TableView()
+        {
+            //var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
+            var products = _context.Products.Where(p => !p.Discontinued)
+               .Include(p => p.Category)
+               .Include(p => p.Manufacturer)
+               .Include(p => p.ProductOrders);
+
+            return View(await products.ToListAsync());
+        }
+
         // GET: Products/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)

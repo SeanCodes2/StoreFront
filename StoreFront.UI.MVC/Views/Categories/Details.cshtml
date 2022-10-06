@@ -4,27 +4,33 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@section NavBarClass {
+    <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
+    }
+        <div class="row">
+            <div class="col-8 offset-2">
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryDescription)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CategoryId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+                <h1>@Model.CategoryName Details</h1>
+
+                <div>
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.CategoryName)
+                        </dt>
+                        <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.CategoryName)
+                        </dd>
+                        <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.CategoryDescription)
+                        </dt>
+                        <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.CategoryDescription)
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model?.CategoryId" class="btn btn-warning mr-3">Edit</a>
+                    <a asp-action="Index" class="btn btn-info">Back to List</a>
+                </div>
+            </div>
+        </div>

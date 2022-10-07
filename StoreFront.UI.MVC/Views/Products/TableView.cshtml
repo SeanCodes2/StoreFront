@@ -5,11 +5,6 @@
     ViewData["Title2"] = "Mountain Bike Parts";
 }
 
-@section NavBarClass {
-    <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
-    }
-
-
 
         <!-- Shop Start -->
         <div class="container-fluid pt-5">
@@ -151,7 +146,7 @@
                             {
                                     <a class="btn border btn-warning mx-3" asp-action="Create">Add Product</a>
                             }
-                                    <a class="btn border btn-info mr-3" asp-action="Index">TileView</a>
+                                <a class="btn border btn-info mr-3" asp-action="Index">TileView</a>
                                 <button class="btn border dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                     Sort by
@@ -181,9 +176,12 @@
                                 <th>
                                 @Html.DisplayNameFor(model => model.UnitsOnOrder)
                                 </th>
-                                <th>
-                                @Html.DisplayNameFor(model => model.Discontinued)
-                                </th>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                    <th>
+                                    @Html.DisplayNameFor(model => model.Discontinued)
+                                    </th>
+                            }
                                 <th>
                                 @Html.DisplayNameFor(model => model.Category)
                                 </th>
@@ -215,13 +213,21 @@
                                     <td>
                                     @Html.DisplayFor(modelItem => item.UnitsOnOrder)
                                     </td>
-                                    <td>
+                                   
+
                                     @{
-                                        string lineText = item.Discontinued ? "Yes" : "No";
+                                        if (User.IsInRole("Admin"))
+                                        { 
+                                        string lineText = "";
+                                            lineText = item.Discontinued ? "Yes" : "No";
+                                            <td>
+                                                <span>@lineText</span>
+                                            </td>
+                                        }
                                     }
-                                        <span>@lineText</span>
+
                                     @*@Html.DisplayFor(modelItem => item.Discontinued)*@
-                                    </td>
+                                    
                                     <td>
                                     @Html.DisplayFor(modelItem => item.Category.CategoryName)
                                     </td>

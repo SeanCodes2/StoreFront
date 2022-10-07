@@ -1,13 +1,16 @@
 ﻿@model StoreFront.DATA.EF.Models.Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Product Details";
+    ViewData["Title2"] = "Product Details";
 }
 
+
+<!-- Shop Detail Start -->
 <div class="container-fluid py-5">
     <div class="row px-xl-5">
         <div class="col-lg-5 pb-5">
-            <img src="~/img/@Model.ProductImage" class="img-fluid" style="height:fit-content" />
+            <img src="~/img/BikeShock-square.jpg" class="img-fluid" style="height:fit-content" />
         </div>
         <div class="col-lg-7 pb-5">
             <h2 class="font-weight-semi-bold">@Model.ProductName</h2>
@@ -70,24 +73,12 @@
         </div>
     </div>
 </div>
+<!-- Shop Detail End -->
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<h1>Details</h1>
+@*
+<h1>Details</h1>
 
 <div>
     <h4>Product</h4>
@@ -130,12 +121,6 @@
             @Html.DisplayFor(model => model.Discontinued)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductImage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductImage)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd class = "col-sm-10">
@@ -152,4 +137,5 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>*@
+</div>
+*@

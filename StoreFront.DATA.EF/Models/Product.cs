@@ -19,9 +19,10 @@ namespace StoreFront.DATA.EF.Models
         public int UnitsInStock { get; set; }
         public int? UnitsOnOrder { get; set; }
         public bool Discontinued { get; set; }
+        public string? ProductImage { get; set; }
 
-        public virtual Category Category { get; set; } = null!;
-        public virtual Manufacturer Manufacturer { get; set; } = null!;
+        public virtual Category? Category { get; set; }
+        public virtual Manufacturer? Manufacturer { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
     }
 }

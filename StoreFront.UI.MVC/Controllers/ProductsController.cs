@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,20 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
+using StoreFront.UI.MVC.Utilities;
 
 namespace StoreFront.UI.MVC.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles ="Admin")]
     public class ProductsController : Controller
     {
         private readonly StoreFrontContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(StoreFrontContext context)
+        public ProductsController(StoreFrontContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Products
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
@@ -45,9 +48,8 @@ namespace StoreFront.UI.MVC.Controllers
 
             return View(await products.ToListAsync());
         }
-
-        // GET: Products/Details/5
         [AllowAnonymous]
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)
@@ -80,10 +82,46 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,ManufacturerId,ProductName,ProductDescription,ProductPrice,UnitsInStock,UnitsOnOrder,Discontinued")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,ManufacturerId,ProductName,ProductDescription,ProductPrice,UnitsInStock,UnitsOnOrder,Discontinued,ProductImage,Image")] Product product)
         {
             if (ModelState.IsValid)
             {
+                #region FILE UPLOAD - CREATE
+
+                if (product.Image != null)
+                {
+                    string ext = Path.GetExtension(product.Image.FileName);
+                    string[] validExts = { ".jpeg", ".jpg", ".gif", ".png" };
+
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        product.ProductImage = Guid.NewGuid() + ext;
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+                        string fullImagePath = webRootPath + "/img/";
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);
+
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+
+                                ImageUtility.ResizeImage(fullImagePath, product.ProductImage, img, maxImageSize, maxThumbSize);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    product.ProductImage = "noimage.png";
+                }
+
+
+                #endregion
+
+
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -116,7 +154,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,ManufacturerId,ProductName,ProductDescription,ProductPrice,UnitsInStock,UnitsOnOrder,Discontinued")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,ManufacturerId,ProductName,ProductDescription,ProductPrice,UnitsInStock,UnitsOnOrder,Discontinued,ProductImage,Image")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -125,6 +163,40 @@ namespace StoreFront.UI.MVC.Controllers
 
             if (ModelState.IsValid)
             {
+                #region FILE UPLOAD - EDIT
+                                
+                string oldFileName = product.ProductImage;
+                                
+                if (product.Image != null)
+                {                    
+                    string ext = Path.GetExtension(product.Image.FileName);                    
+                    string[] validExts = { ".jpeg", ".jpg", ".gif", ".png" };
+                   
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {                        
+                        product.ProductImage = Guid.NewGuid() + ext;                        
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+                        string fullPath = webRootPath + "/img/";
+                        
+                        if (oldFileName != "noimage.png")
+                        {
+                            ImageUtility.Delete(fullPath, oldFileName);
+                        }
+                      
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);
+                            using (Image img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+                                ImageUtility.ResizeImage(fullPath, product.ProductImage, img, maxImageSize, maxThumbSize);
+                            }
+                        }
+                    }
+                }
+                #endregion
+
                 try
                 {
                     _context.Update(product);

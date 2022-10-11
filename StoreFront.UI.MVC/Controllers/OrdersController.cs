@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +9,6 @@ using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly StoreFrontContext _context;
@@ -22,7 +19,6 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Orders
-        
         public async Task<IActionResult> Index()
         {
             var storeFrontContext = _context.Orders.Include(o => o.Customer);
@@ -51,7 +47,7 @@ namespace StoreFront.UI.MVC.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToName");
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToFirstName");
             return View();
         }
 
@@ -68,7 +64,7 @@ namespace StoreFront.UI.MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToName", order.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToFirstName", order.CustomerId);
             return View(order);
         }
 
@@ -85,7 +81,7 @@ namespace StoreFront.UI.MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToName", order.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToFirstName", order.CustomerId);
             return View(order);
         }
 
@@ -121,7 +117,7 @@ namespace StoreFront.UI.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToName", order.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToFirstName", order.CustomerId);
             return View(order);
         }
 

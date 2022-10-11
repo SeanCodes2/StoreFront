@@ -71,9 +71,14 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public int CustomerId { get; set; }
 
         [StringLength(50, ErrorMessage ="*Cannot Exceed 50 Characters")]
-        [Display(Name ="Name")]
-        [Required(ErrorMessage ="*Name is Required")]
-        public string ShipToName { get; set; } = null!;
+        [Display(Name ="First Name")]
+        [Required(ErrorMessage ="*First Name is Required")]
+        public string ShipToFirstName { get; set; } = null!;      
+        
+        [StringLength(50, ErrorMessage ="*Cannot Exceed 50 Characters")]
+        [Display(Name ="Last Name")]
+        [Required(ErrorMessage ="*Last Name is Required")]
+        public string ShipToLastName { get; set; } = null!;
 
         [StringLength(50, ErrorMessage = "*Cannot Exceed 50 Characters")]
         [Display(Name = "City")]        
@@ -89,6 +94,11 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public string? ShipToZip { get; set; }
 
         public string? UserId { get; set; }
+
+
+        [Display(Name ="Address")]
+        [StringLength(150, ErrorMessage ="*Cannot Exceed 150 Characters")]
+        public string? ShipToAddress { get; set; }
     }
 
    
@@ -168,3 +178,5 @@ namespace StoreFront.DATA.EF.Models//Metadata
         public bool Discontinued { get; set; }
     }
 }
+
+

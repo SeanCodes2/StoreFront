@@ -34,7 +34,7 @@ namespace StoreFront.DATA.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StoreFront;trusted_connection=true;MultipleActiveResultSets=true;");
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;database=StoreFront;trusted_connection=true;multipleactiveresultsets=true;");
             }
         }
 
@@ -140,13 +140,15 @@ namespace StoreFront.DATA.EF.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.CustomerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CustomerID");
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.ShipToAddress).HasMaxLength(150);
 
                 entity.Property(e => e.ShipToCity).HasMaxLength(50);
 
-                entity.Property(e => e.ShipToName).HasMaxLength(50);
+                entity.Property(e => e.ShipToFirstName).HasMaxLength(50);
+
+                entity.Property(e => e.ShipToLastName).HasMaxLength(50);
 
                 entity.Property(e => e.ShipToState).HasMaxLength(50);
 

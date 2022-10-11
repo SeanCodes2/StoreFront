@@ -11,11 +11,13 @@ namespace StoreFront.DATA.EF.Models
         }
 
         public int CustomerId { get; set; }
-        public string ShipToName { get; set; } = null!;
+        public string ShipToFirstName { get; set; } = null!;
+        public string ShipToLastName { get; set; } = null!;
         public string? ShipToCity { get; set; }
         public string? ShipToState { get; set; }
         public string? ShipToZip { get; set; }
         public string? UserId { get; set; }
+        public string? ShipToAddress { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

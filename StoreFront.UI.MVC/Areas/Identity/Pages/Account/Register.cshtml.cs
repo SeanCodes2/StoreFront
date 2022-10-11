@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
 {
@@ -97,6 +98,38 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+            public int CustomerID { get; set; }
+
+            [Required]
+            [StringLength(50, ErrorMessage ="Max 50 Characters")]
+            [Display(Name ="First Name")]
+            public string ShipToFirstName { get; set; }
+            
+            [Required]
+            [StringLength(50, ErrorMessage ="Max 50 Characters")]
+            [Display(Name ="Last Name")]
+            public string ShipToLastName { get; set; }
+
+            [StringLength(50, ErrorMessage = "Max 50 Characters")]
+            [Display(Name = "City")]
+            public string? ShipToCity { get; set; }
+
+            [StringLength(50, ErrorMessage = "Max 50 Characters")]
+            [Display(Name = "State")]
+            public string? ShipToState { get; set; }
+
+            [StringLength(50, ErrorMessage = "Max 50 Characters")]
+            [Display(Name = "ZipCode")]
+            public string? ShipToZip { get; set; }
+
+           
+            public string? UserID { get; set; }
+
+            [StringLength(150, ErrorMessage = "Max 150 Characters")]
+            [Display(Name = "Address")]
+            public string? ShipToAddress { get; set; }
         }
 
 
@@ -123,6 +156,38 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
+                    #region Extend Identity - Step 3
+                    //Create a new UserDetails object and assign it values from the Register Model
+                    //AFter creating the object, we will use our GadgetStoreContext to save that object to the UserDetails table in the DB.
+                    //NOTE: To access our DB Context, we need 'using GadgetStore.DATA.EF.Models'
+
+                    StoreFrontContext _context = new StoreFrontContext();
+
+                    //Instantiate the UserDetails object, assign values to the object from teh Input model, and save the UserDetails object to the DB
+                    var customer = new Customer()
+                    {
+                        //object initialization syntax
+                        UserId = userId,
+                        ShipToFirstName = Input.ShipToFirstName,
+                        ShipToLastName = Input.ShipToLastName,
+                        ShipToAddress = Input.ShipToAddress,
+                        ShipToCity = Input.ShipToCity,
+                        ShipToState = Input.ShipToState,
+                        ShipToZip = Input.ShipToZip
+                    };
+
+                    //Queing the record up to be saved to the DB
+                    _context.Customers.Add(customer);
+                    //Save the record to the DB
+                    _context.SaveChanges();
+
+
+
+
+                    #endregion
+
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

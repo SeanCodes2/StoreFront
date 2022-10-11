@@ -7,17 +7,17 @@
 }
 
 
-<h1>All Users</h1>
+<h1 class="offset-1">All Users</h1>
 
 @if (Model.Any())
 {
-    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary mb-3" style="width:auto">
+    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary mb-3 offset-1" style="width:auto">
         Add new user
     </a>
 
     foreach (var user in Model)
     {
-        <div class="card mb-3">
+        <div class="card mb-3 offset-1">
             <div class="card-header">
                 User Id : @user.Id
             </div>
@@ -45,7 +45,7 @@
 }
 else
 {
-    <div class="card">
+    <div class="card offset-1">
         <div class="card-header">
             No users created yet
         </div>

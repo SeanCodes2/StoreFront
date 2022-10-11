@@ -4,53 +4,64 @@
     ViewData["Title"] = "Delete";
 }
 
-        <div class="row">
-            <div class="col-8 offset-2">
-                <h1>Delete @Model.ShipToName</h1>
+<div class="row">
+    <div class="col-8 offset-2">
+        <h1>Delete @Model.ShipToFirstName @Model.ShipToLastName</h1>
 
-                <h3>Are you sure you want to delete @Model.ShipToName?</h3>
+        <h3>Are you sure you want to delete this?</h3>
+        <h3 class="text-danger">This Action is Permanent!</h3>
+        <div>
+            <h4>Manufacturer</h4>
+            <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToFirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToFirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToLastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToLastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToCity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToCity)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToState)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToState)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToZip)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToZip)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShipToAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShipToAddress)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CustomerId" />
                 <h3 class="text-danger">This Action is Permanent!</h3>
-                <div>
-                    <h4>Customer</h4>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ShipToName)
-                        </dt>
-                        <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ShipToName)
-                        </dd>
-                        <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ShipToCity)
-                        </dt>
-                        <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ShipToCity)
-                        </dd>
-                        <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ShipToState)
-                        </dt>
-                        <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ShipToState)
-                        </dd>
-                        <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ShipToZip)
-                        </dt>
-                        <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ShipToZip)
-                        </dd>
-                        <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.UserId)
-                        </dt>
-                        <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.UserId)
-                        </dd>
-                    </dl>
-                    <h3 class="text-danger">This Action is Permanent!</h3>
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="CustomerId" />
-                        <input type="submit" value="Delete" class="btn btn-danger" /> |
-                        <a asp-action="Index" class="btn btn-info ml-3">Back to List</a>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-info ml-3">Back to List</a>
+    </form>
+</div>

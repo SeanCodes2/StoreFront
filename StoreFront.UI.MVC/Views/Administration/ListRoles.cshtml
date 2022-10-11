@@ -6,17 +6,17 @@
     ViewData["Title"] = "List Roles";
 }
 
-<h1>Roles</h1>
+<h1 class="offset-1">Roles</h1>
 
 
 @if (Model.Any())
 {
-    <a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateRole"
+    <a class="btn btn-primary mb-3 offset-1" style="width:auto" asp-action="CreateRole"
    asp-controller="administration">Add new role</a>
 
     foreach (var role in Model)
     {
-        <div class="card mb-3">
+        <div class="card mb-3 offset-1">
             <div class="card-header">
                 Role Id : @role.Id
             </div>
@@ -43,7 +43,7 @@
 }
 else
 {
-    <div class="card">
+    <div class="card offset-1">
         <div class="card-header">
             No roles created yet
         </div>

@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StoreFront.DATA.EF.Models;
+using StoreFront.UI.MVC.Models;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -29,19 +33,112 @@ namespace StoreFront.UI.MVC.Controllers
      *      - Add Submit Order button to Index View
      *      - Code SubmitOrder() action
      * */
+
     #endregion
+
+
     public class ShoppingCartController : Controller
     {
+        private readonly StoreFrontContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public ShoppingCartController(StoreFrontContext context, UserManager<IdentityUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        //TODO: Create View********************************
+
         public IActionResult Index()
         {
-            return View();
+            var sessionCart = HttpContext.Session.GetString("cart");
+
+            Dictionary<int, CartItemViewModel> shoppingCart = null;
+
+            if (sessionCart == null)
+            {
+                ViewBag.Message = "There are no items in your cart";
+
+                shoppingCart = new Dictionary<int, CartItemViewModel>();
+            }
+            else
+            {
+                ViewBag.Message = null;
+
+                shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+            }
+
+            return View(shoppingCart);
         }
 
         public IActionResult AddToCart(int Id)
         {
+            Dictionary<int, CartItemViewModel> shoppingCart = null;
+
+            var sessionCart = HttpContext.Session.GetString("cart");
+
+            if (sessionCart == null)
+            {
+                shoppingCart = new Dictionary<int, CartItemViewModel>();
+            }
+            else
+            {
+                shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+            }
+
+            Product product = _context.Products.Find(Id);
+
+            CartItemViewModel civm = new CartItemViewModel(1, product);
+
+            if (shoppingCart.ContainsKey(product.ProductId))
+            {
+                shoppingCart[product.ProductId].Qty++;
+            }
+            else
+            {
+                shoppingCart.Add(product.ProductId, civm);
+            }
+
+            string jsonCart = JsonConvert.SerializeObject(shoppingCart);
+            HttpContext.Session.SetString("cart", jsonCart);
+
             return RedirectToAction("Index");
         }
 
+        public IActionResult RemoveFromCart(int Id)
+        {
+            var sessionCart = HttpContext.Session.GetString("cart");
 
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            shoppingCart.Remove(Id);
+
+            if (shoppingCart.Count() == 0)
+            {
+                HttpContext.Session.Remove("cart");
+            }
+            else
+            {
+                string jsonCart = JsonConvert.SerializeObject(shoppingCart);
+                HttpContext.Session.SetString("cart", jsonCart);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult UpdateCart(int productId, int qty)
+        {
+            var sessionCart = HttpContext.Session.GetString("cart");
+
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            shoppingCart[productId].Qty = qty;
+
+            string jsonCart = JsonConvert.SerializeObject(shoppingCart);
+            HttpContext.Session.SetString("cart", jsonCart);
+
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -1,5 +1,290 @@
-﻿@*
+﻿@model Dictionary<int, CartItemViewModel>;
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Shopping Cart"; ViewData["Title2"] = "Product Details";
 }
+
+<div class="containter-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 offset-2 table-responsive mb-5">
+            @if (Model.Count == 0)
+            {
+                <p class="alert alert-warning text-center">
+                    @ViewBag.Message
+                </p>
+                <div align="center">
+                    <a asp-action="Index" asp-controller="Products" class="btn w-25 btn-info my-3 py-3 d-block">Start Shopping</a>
+                </div>
+            }
+            else
+            {
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th></th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        @{
+                            decimal? subTotal = 0;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle"><img src="~/img/t_@item.Value.CartProduct.ProductImage" style="width: 50px;" /></td>
+                                <td> <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Value.CartProduct.ProductId">
+                                        @item.Value.CartProduct.ProductName</a>
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Value.CartProduct.ProductPrice)</td>
+
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        @*<div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-minus">
+                                <i class="fa fa-minus"></i>
+                                </button>
+                                </div>*@
+                                        @*<input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">*@
+                                        <form asp-action="UpdateCart">
+                                            <input type="hidden" name="productId" value="@item.Value.CartProduct.ProductId" />
+                                            <input type="number" min="1" max="@item.Value.CartProduct.UnitsInStock" name="qty" value="@item.Value.Qty" class="form-control d-block mx-auto w-50 text-center" />
+                                            <input type="submit" value="Update Cart" class="btn btn-primary btn-sm" />
+                                        </form>
+                                        @*<div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-plus">
+                                <i class="fa fa-plus"></i>
+                                </button>
+                                </div>*@
+                                    </div>
+                                </td>
+
+                                <td>
+                                        
+                                    @{
+                                        decimal? lineTotal = item.Value.Qty * item.Value.CartProduct.ProductPrice;
+                                        subTotal = subTotal + lineTotal;
+                                    }
+                                    @string.Format($"{lineTotal:c}")
+                                </td>
+                                <td>
+                                    <a asp-action="RemoveFromCart" asp-controller="ShoppingCart" asp-route-id="@item.Value.CartProduct.ProductId" class="btn btn-sm btn-primary"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">
+                                @string.Format($"{subTotal:c}")
+                            </h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Tax</h6>
+                            <h6 class="font-weight-medium">
+                                @{
+                                    double? tax = (double)subTotal * .09475;
+                                }
+                                @string.Format($"{tax:c}")
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">
+                                @{
+                                    decimal? total = subTotal + (decimal)tax;
+                                }
+                                @string.Format($"{total:c}")
+                            </h5>
+                        </div>
+                        <div align="center">
+
+                        <a asp-action="Index" asp-controller="Products" class="btn w-25 btn-info my-3 py-3">Continue Shopping</a>
+                        <button  class="btn w-25 btn-primary my-3 ml-5 py-3">Proceed To Checkout</button>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+
+
+    </div>
+</div>
+
+@*<!-- Cart Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-bordered text-center mb-0">
+                <thead class="bg-secondary text-dark">
+                    <tr>
+                        <th>Products</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    <tr>
+                        <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle"><img src="img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle"><img src="img/product-3.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle"><img src="img/product-4.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle"><img src="img/product-5.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">$150</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <form class="mb-5" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control p-4" placeholder="Coupon Code">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Apply Coupon</button>
+                    </div>
+                </div>
+            </form>
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Subtotal</h6>
+                        <h6 class="font-weight-medium">$150</h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">$10</h6>
+                    </div>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold">$160</h5>
+                    </div>
+                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->*@

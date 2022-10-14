@@ -24,6 +24,12 @@
 
             <strong>@Html.DisplayNameFor(model => model.UnitsInStock): </strong><p class="text-info d-inline-block">@Html.DisplayFor(model => model.UnitsInStock)</p>
 
+            <br /> <strong>@Html.DisplayNameFor(model => model.UnitsOnOrder): </strong><p class="text-info d-inline-block">@Html.DisplayFor(model => model.UnitsOnOrder)</p>
+
+            <br />
+            <strong>@Html.DisplayNameFor(model => model.ProductDescription):</strong>
+          
+            <p class="mb-4 text-info">@Html.DisplayFor(model => model.ProductDescription)</p>
             <hr />
 
             @*<div class="d-flex mb-3">
@@ -37,8 +43,6 @@
                 <small class="pt-1">(50 Reviews)</small>
             </div>*@
             <h3 class="font-weight-semi-bold mb-4">@Model.ProductPrice.ToString("c")</h3>
-            <p>@Html.DisplayNameFor(model => model.ProductDescription)</p>
-            <p class="mb-4">@Html.DisplayFor(model => model.ProductDescription)</p>
 
             <div class="d-flex align-items-center mb-4 pt-2">
                 @*<div class="input-group quantity mr-3" style="width: 130px;">
@@ -56,7 +60,7 @@
                 </div>*@
                 <div>
                     @*<button asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@Model.ProductId" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>*@
-                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@Model.ProductId" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
+                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@Model.ProductId" class="btn btn-success px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</a>
                 </div>
                 <div>
                     <a asp-action="Index" class="btn btn-primary btn-plus mx-3">Return to Products</a>

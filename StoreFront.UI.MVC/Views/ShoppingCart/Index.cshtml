@@ -1,4 +1,7 @@
-﻿@model Dictionary<int, CartItemViewModel>;
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor _accessor
+
+@model Dictionary<int, CartItemViewModel>;
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -39,11 +42,13 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="align-middle"><img src="~/img/t_@item.Value.CartProduct.ProductImage" style="width: 50px;" /></td>
-                                <td> <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Value.CartProduct.ProductId">
-                                        @item.Value.CartProduct.ProductName</a>
+                                <td class="align-middle"><img src="~/img/t_@item.Value.CartProduct.ProductImage" /></td>
+                                <td class="align-middle">
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Value.CartProduct.ProductId">
+                                        @item.Value.CartProduct.ProductName
+                                    </a>
                                 </td>
-                                <td>@Html.DisplayFor(modelItem => item.Value.CartProduct.ProductPrice)</td>
+                                <td class="align-middle">@Html.DisplayFor(modelItem => item.Value.CartProduct.ProductPrice)</td>
 
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -53,10 +58,10 @@
                                 </button>
                                 </div>*@
                                         @*<input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">*@
-                                        <form asp-action="UpdateCart">
+                                        <form asp-action="UpdateCart" class="align-middle">
                                             <input type="hidden" name="productId" value="@item.Value.CartProduct.ProductId" />
                                             <input type="number" min="1" max="@item.Value.CartProduct.UnitsInStock" name="qty" value="@item.Value.Qty" class="form-control d-block mx-auto w-50 text-center" />
-                                            <input type="submit" value="Update Cart" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Update Cart" class="btn btn-success btn-sm" />
                                         </form>
                                         @*<div class="input-group-btn">
                                 <button class="btn btn-sm btn-primary btn-plus">
@@ -66,16 +71,16 @@
                                     </div>
                                 </td>
 
-                                <td>
-                                        
+                                <td class="align-middle">
+
                                     @{
                                         decimal? lineTotal = item.Value.Qty * item.Value.CartProduct.ProductPrice;
                                         subTotal = subTotal + lineTotal;
                                     }
                                     @string.Format($"{lineTotal:c}")
                                 </td>
-                                <td>
-                                    <a asp-action="RemoveFromCart" asp-controller="ShoppingCart" asp-route-id="@item.Value.CartProduct.ProductId" class="btn btn-sm btn-primary"><i class="fa fa-times"></i></a>
+                                <td class="align-middle">
+                                    <a asp-action="RemoveFromCart" asp-controller="ShoppingCart" asp-route-id="@item.Value.CartProduct.ProductId" class="btn btn-sm btn-warning"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
                         }
@@ -110,18 +115,38 @@
                             <h5 class="font-weight-bold">
                                 @{
                                     decimal? total = subTotal + (decimal)tax;
+                                                                           
+                                    _accessor.HttpContext.Session.SetString("total", total.ToString());
                                 }
                                 @string.Format($"{total:c}")
                             </h5>
                         </div>
                         <div align="center">
-
-                        <a asp-action="Index" asp-controller="Products" class="btn w-25 btn-info my-3 py-3">Continue Shopping</a>
-                        <button  class="btn w-25 btn-primary my-3 ml-5 py-3">Proceed To Checkout</button>
                         </div>
                     </div>
                 </div>
+                <div align="right">
+                               
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>
+                            <a asp-action="SubmitOrder" class="btn w-25 btn-success my-3 ml-5 py-3">
+                                Submit Order
+                            </a>
+                        </p>
+                    }
+                    else
+                    {
+                        <button disabled="disabled" class="btn w-25 btn-success my-3 ml-5 py-3">Submit Order</button>
+                        <p>
+                            To place this order you must be logged in. Log In<a asp-area="Identity" asp-page="/Account/Login"> Here</a>
+                        </p>
+                    }
 
+                    <a asp-action="Index" asp-controller="Products" class="btn w-25 btn-info my-3 py-3" >Continue Shopping</a>
+
+
+                </div>
             }
         </div>
 

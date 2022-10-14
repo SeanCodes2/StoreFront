@@ -3,6 +3,7 @@ using StoreFront.DATA.EF.Models;
 using StoreFront.UI.MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using NuGet.Versioning;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -139,6 +140,64 @@ namespace StoreFront.UI.MVC.Controllers
             HttpContext.Session.SetString("cart", jsonCart);
 
             return RedirectToAction("Index");
+        }
+
+        #region Planning Out Order Submission
+        // Create Order object -> then save to DB
+        // - CustomerId (get from Identity)
+        // - OrderDate (current date/time aka Datetime.Now)
+        // - ShipDate (current date/time)
+        // - ItemsSold (cart)
+        // - OrderAmountTotal (cart)
+        // Add record to _context
+        // Save DB Changes
+
+        // Create OrderProduct objects for each item in the cart -> then save to DB
+        // - ProductId (Cart)
+        // - OrderId (OrderObject created)       
+        // - ProductPrice (Cart)
+        // Add record to _context
+        // Save DB changes 
+        #endregion
+
+        public async Task<IActionResult> SubmitOrder()
+        {
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+
+                        
+
+            Customer customer = _context.Customers.Where(c => c.UserId == userId).FirstOrDefault();
+
+            var sessionCart = HttpContext.Session.GetString("cart");
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            Order o = new Order()
+            {
+                CustomerId = customer.CustomerId,
+                OrderDate = DateTime.Now,
+                ShipDate = DateTime.Now.AddDays(3),
+                ItemsSold = shoppingCart.Values.Select(x => x.Qty).Sum(),
+                OrderAmoutTotal = decimal.Parse(HttpContext.Session.GetString("total"))            
+            };
+
+            _context.Orders.Add(o);
+
+            foreach (var item in shoppingCart)
+            {
+                ProductOrder po = new ProductOrder()
+                {
+                    ProductId = item.Value.CartProduct.ProductId,
+                    OrderId = o.OrderId,
+                    ProductPrice = item.Value.CartProduct.ProductPrice
+                };
+                o.ProductOrders.Add(po);
+            }
+
+            _context.SaveChanges();
+
+            HttpContext.Session.Remove("cart");
+
+            return RedirectToAction("Index", "Orders");
         }
     }
 }

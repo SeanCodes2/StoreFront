@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using MailKit.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
 using StoreFront.UI.MVC.Utilities;
+using X.PagedList;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -25,15 +27,64 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, string searchTerm, int manufacturerId, int page = 1)
         {
+            int pageSize = 8;
+
             //var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
             var products = _context.Products.Where(p => !p.Discontinued)
                .Include(p => p.Category)
                .Include(p => p.Manufacturer)
-               .Include(p => p.ProductOrders);
+               .Include(p => p.ProductOrders).ToList();
 
-            return View(await products.ToListAsync());
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "ManufacturerId", "ManufacturerName");
+
+            //product manufacturer checkbox filter
+
+
+            //_layout categories dropdown
+            if (id != null)
+            {
+                products = products.Where(p => p.Category.CategoryId == id).ToList();
+            }
+            else
+            {
+                id = null;
+            }
+
+            #region Optional Manufacturer Filter
+            if (manufacturerId != 0)
+            {
+                products = products.Where(p => p.Manufacturer.ManufacturerId == manufacturerId).ToList();
+                // Recreate the dropdown list so the current category is still selected
+                ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "ManufacturerId", "ManufacturerName", manufacturerId);
+
+            }
+            #endregion
+
+
+            #region Optional Search Filter
+            if (!String.IsNullOrEmpty(searchTerm))
+            {
+                products = products.Where(p =>
+                                           p.ProductName.ToLower().Contains(searchTerm.ToLower())
+                                           || p.Manufacturer.ManufacturerName.ToLower().Contains(searchTerm.ToLower())
+                                           || p.ProductDescription.ToLower().Contains(searchTerm.ToLower())
+                                           || p.Category.CategoryName.ToLower().Contains(searchTerm.ToLower())).ToList();
+
+                ViewBag.SearchTerm = searchTerm;
+                ViewBag.NbrResults = products.Count;
+            }
+            else
+            {
+                ViewBag.SearchTerm = null;
+                ViewBag.NbrResults = null;
+            }
+            #endregion
+
+
+            return View(products.ToPagedList(page, pageSize));
         }
 
         // GET: TableView

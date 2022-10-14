@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,16 +15,21 @@ namespace StoreFront.UI.MVC.Controllers
     public class OrdersController : Controller
     {
         private readonly StoreFrontContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public OrdersController(StoreFrontContext context)
+        public OrdersController(StoreFrontContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var storeFrontContext = _context.Orders.Include(o => o.Customer);
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+            Customer customer = _context.Customers.Where(c => c.UserId == userId).FirstOrDefault();
+
+            var storeFrontContext = _context.Orders.Include(o => o.Customer).Where(o => o.Customer.UserId == userId);
             return View(await storeFrontContext.ToListAsync());
         }
 
@@ -41,10 +49,23 @@ namespace StoreFront.UI.MVC.Controllers
                 return NotFound();
             }
 
+            #region Prevent users from accessing orders that are not thiers
+            //Prevents user from hacking url to see other user's order details
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+            Customer customer = _context.Customers.Where(c => c.UserId == userId).FirstOrDefault();
+
+            if (order.Customer.UserId != userId)
+            {
+                //kick em back to index
+                return RedirectToAction("Index", "Orders");
+            }
+            #endregion
+
             return View(order);
         }
 
         // GET: Orders/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "ShipToFirstName");
@@ -54,6 +75,7 @@ namespace StoreFront.UI.MVC.Controllers
         // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderId,CustomerId,OrderDate,ShipDate,ItemsSold,OrderAmoutTotal")] Order order)
@@ -69,6 +91,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Orders/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Orders == null)
@@ -88,6 +111,7 @@ namespace StoreFront.UI.MVC.Controllers
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderId,CustomerId,OrderDate,ShipDate,ItemsSold,OrderAmoutTotal")] Order order)
@@ -122,6 +146,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Orders == null)
@@ -141,6 +166,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // POST: Orders/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

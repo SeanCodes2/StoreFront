@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using StoreFront.DATA.EF;
+@using StoreFront.UI.MVC;
 @inject SignInManager<IdentityUser> signInManager
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +25,14 @@
     <script src="https://kit.fontawesome.com/62ecb385d9.js" crossorigin="anonymous"></script>
     @*<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">*@
 
+    <!-- Datatables.net style-->
+    <link href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
     <!-- Libraries Stylesheet -->
     <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- PagedList Stylesheet-->
+    <link href="~/css/PagedList.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet">
@@ -32,35 +41,7 @@
 <body>
     <!-- Topbar Start -->
     <div class="container-fluid">
-        <div class="row bg-secondary py-2 px-xl-5">
-            @*<div class="col-lg-6 d-none d-lg-block">
-            <div class="d-inline-flex align-items-center">
-            <a class="text-dark" href="">FAQs</a>
-            <span class="text-muted px-2">|</span>
-            <a class="text-dark" href="">Help</a>
-            <span class="text-muted px-2">|</span>
-            <a class="text-dark" href="">Support</a>
-            </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-right">
-            <div class="d-inline-flex align-items-center">
-            <a class="text-dark px-2" href="">
-            <i class="fab fa-facebook-f"></i>
-            </a>
-            <a class="text-dark px-2" href="">
-            <i class="fab fa-twitter"></i>
-            </a>
-            <a class="text-dark px-2" href="">
-            <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a class="text-dark px-2" href="">
-            <i class="fab fa-instagram"></i>
-            </a>
-            <a class="text-dark pl-2" href="">
-            <i class="fab fa-youtube"></i>
-            </a>
-            </div>
-            </div>*@
+        <div class="row bg-secondary py-2 px-xl-5">         
         </div>
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
@@ -69,25 +50,21 @@
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
-                <form action="">
+                <form asp-action="Index" asp-controller="Products" method="get">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
+                        <input type="text" class="form-control" name="searchTerm" onchange="this.form.submit()" placeholder="Search Products" autocomplete="off" value="@ViewBag.SearchTerm">
+
                         <div class="input-group-append">
                             <span class="input-group-text bg-transparent text-primary">
                                 <i class="fa fa-search"></i>
                             </span>
                         </div>
                     </div>
-                </form>
+                </form>                
             </div>
-            <div class="col-lg-3 col-6 text-right">
-                <a href="" class="btn border">
-                    <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">0</span>
-                </a>
+            <div class="col-lg-3 col-6 text-right">                
                 <a asp-action="Index" asp-controller="ShoppingCart" class="btn border">
-                    <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <i class="fas fa-shopping-cart text-primary"></i>                    
                 </a>
             </div>
         </div>
@@ -101,7 +78,7 @@
                     <h6 class="m-0">Categories</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
-
+                
                 @{
                     string navBarStr;
                     if (ViewData["Title"] == "Home")
@@ -115,17 +92,18 @@
                 }
                 @Html.Raw(navBarStr)
 
-                <div class="navbar-nav w-100 overflow-hidden " style="height: 410px">
-                    <a href="" class="nav-item nav-link">Handlebars</a>
-                    <a href="" class="nav-item nav-link">Wheels</a>
-                    <a href="" class="nav-item nav-link">Tires</a>
-                    <a href="" class="nav-item nav-link">Brakes</a>
-                    <a href="" class="nav-item nav-link">Suspension</a>
-                    <a href="" class="nav-item nav-link">Pedals</a>
-                    <a href="" class="nav-item nav-link">Saddles</a>
-                    <a href="" class="nav-item nav-link">Drivetrain</a>
-                    <a href="" class="nav-item nav-link">Seatpost</a>
-                    <a href="" class="nav-item nav-link">Maintenance</a>
+                <div class="navbar-nav w-100 overflow-hidden " style="height: 410px">    
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="1"  class="nav-item nav-link bg-body">Handlebars</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="2"  class="nav-item nav-link bg-danger">Wheels</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="3"  class="nav-item nav-link bg-dark">Tires</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="4"  class="nav-item nav-link bg-gradient ">Brakes</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="5"  class="nav-item nav-link bg-info">Suspension</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="6"  class="nav-item nav-link bg-light">Pedals</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="7"  class="nav-item nav-link bg-primary">Saddles</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="8"  class="nav-item nav-link bg-secondary">Drivetrain</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="9"  class="nav-item nav-link bg-success">Seatpost</a>
+                    <a asp-action="Index" asp-controller="Products" asp-route-id="10"  class="nav-item nav-link bg-warning">Maintenance</a>                  
+                                   
                 </div>
                 </nav>
             </div>
@@ -162,7 +140,7 @@
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                     <div class="dropdown-menu rounded-0 m-0">
                                         <a href="@Url.Action("Index", "ShoppingCart")" class="dropdown-item">Shopping Cart</a>
-                                        <a href="@Url.Action("CheckOut", "Home")" class="dropdown-item">Checkout</a>
+                                        <a href="@Url.Action("Index", "Orders")" class="dropdown-item">Orders</a>
                                     </div>
                                 </div>
                             }
@@ -197,7 +175,7 @@
     <!-- Footer Start -->
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <div class="col-lg-6 col-md-12 mb-5 pr-3 pr-xl-5">
                 <a href="" class="text-decoration-none">
                     <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">MTB</span>Parts</h1>
                 </a>
@@ -206,7 +184,7 @@
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
             </div>
-            <div class="col-lg-8 col-md-12">
+            <div class="col-lg-4 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-5">
                         <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
@@ -214,26 +192,10 @@
                             <a class="text-dark mb-2" href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-dark mb-2" href="@Url.Action("Index", "Products")"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
                             <a class="text-dark mb-2" href="@Url.Action("Index", "ShoppingCart")"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-dark mb-2" href="@Url.Action("Index", "ShoppingCart")"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                            <a class="text-dark mb-2" href="@Url.Action("Index", "Orders")"><i class="fa fa-angle-right mr-2"></i>Orders</a>
                             <a class="text-dark" href="@Url.Action("Contact", "Home")"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                         </div>
-                    </div>
-
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
-                        <form action="">
-                            <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
-                                       required="required" />
-                            </div>
-                            <div>
-                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
-                            </div>
-                        </form>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -244,10 +206,7 @@
                     by
                     <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">SeanCodes2</a><br>
                 </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="~/img/payments.png" alt="">
-            </div>
+            </div>        
         </div>
     </div>
     <!-- Footer End -->
@@ -263,6 +222,7 @@
     <!-- Contact Javascript File -->
     <script src="~/mail/jqBootstrapValidation.min.js"></script>
     <script src="~/mail/contact.js"></script>
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="~/js/main.js"></script>

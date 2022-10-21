@@ -91,6 +91,7 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
+            //returnUrl ??= Url.ActionLink("Index", "");
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process

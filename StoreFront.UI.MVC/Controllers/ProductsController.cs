@@ -27,9 +27,10 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int? id, string searchTerm, int manufacturerId, int page = 1)
+        // GET: TileView
+        public async Task<IActionResult> Index(int? priceCase, int? id, string searchTerm, int manufacturerId, int page = 1 )
         {
-            int pageSize = 8;
+            int pageSize = 12;
 
             //var storeFrontContext = _context.Products.Include(p => p.Category).Include(p => p.Manufacturer);
             var products = _context.Products.Where(p => !p.Discontinued)
@@ -61,6 +62,34 @@ namespace StoreFront.UI.MVC.Controllers
                 ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "ManufacturerId", "ManufacturerName", manufacturerId);
 
             }
+            #endregion
+
+            #region Price Range Checkboxes
+            if (priceCase != null)
+            {
+                switch (priceCase)
+                {
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+
+                        break;
+                    case 4:
+
+                        break;
+                    case 5:
+
+                    default:
+
+                        break;
+                }
+            }
+
+
             #endregion
 
 

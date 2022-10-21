@@ -2375,12 +2375,12 @@ fieldset:disabled a.btn {
   border-color: #c17a74;
 }
 
-.btn-primary:focus, .btn-primary.focus {
-  color: #fff;
-  background-color: #c5837c;
-  border-color: #c17a74;
-  box-shadow: 0 0 0 0.2rem rgba(183, 138, 135, 0.5);
-}
+    .btn-primary:focus, .btn-primary.focus {
+        color: #fff;
+        background-color: #91c4d9;
+        border-color: #2a7696d6;
+        box-shadow: 0 0 0 0.2rem rgba(183, 138, 135, 0.5);
+    }
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #212529;
